@@ -13,7 +13,12 @@ while True:
         #cambiamos a espacio HSV
         frameHSV = cv2.cvtColor(frame,cv2.COLOR_BGR2HSV)
         mask = cv2.inRange(frameHSV,azulBajo,azulAlto)
-        cv2.imshow('maskAzul',mask)
+        a,contornos, = cv2.findContours(mask, cv2.RETR_EXTERNAL,
+                                        cv2.CHAIN_APPROX_SIMPLE)
+
+
+        cv2.drawContours(frame,a,-1,(255,0,0),3)# Dibjuamos los contornos en frame con -1 se bijutan todos los contoros, en azul con grosor 3
+        #cv2.imshow('maskAzul',mask)
         cv2.imshow('frame',frame)
         if cv2.waitKey(1) & 0xFF == ord('d'):
             break
