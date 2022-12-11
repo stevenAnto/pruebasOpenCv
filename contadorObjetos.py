@@ -48,8 +48,9 @@ def dibujarContorno(contorno, color):
 
 
 contornosAmarillo = cv2.findContours(maskAmarillo,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
-#print(contornosAmarillo)
-#print(type(contornosAmarillo))
+print(contornosAmarillo)
+print("tamanio",len(contornosAmarillo))
+print(type(contornosAmarillo))
 contornosVede = cv2.findContours(maskVerder,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
 contornosRojo = cv2.findContours(maskRed,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
 

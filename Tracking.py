@@ -8,7 +8,7 @@ objetos = {
         "5":"Papel",
         "3":"tres",
         "4":"Papel",
-"5":"cinco",
+"5":"Papel",
 "6":"seis",
 "7":"siete",
 "8":"ocho",
@@ -17,10 +17,11 @@ objetos = {
 
 def dibujar(mask,color):
 
-    contornos, sinUso, = cv2.findContours(mask, cv2.RETR_EXTERNAL,
-                                          cv2.CHAIN_APPROX_SIMPLE)
+    contornos = cv2.findContours(mask, cv2.RETR_EXTERNAL,
+                                          cv2.CHAIN_APPROX_SIMPLE)[0]
     contador=0
-    #print(len(contornos))
+    #bota muchos contornos porque tambien cuenta a los pequenos, solo nos interesa los que tiene una area prudente
+    print("cuantos contornos",len(contornos))
     for (i,c) in enumerate(contornos):
 
         area = cv2.contourArea(c)
@@ -33,15 +34,22 @@ def dibujar(mask,color):
             y = int(M["m01"] / M["m00"])
             cv2.circle(frame, (x, y), 7, (0, 255, 0), -1)
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(frame, '{},{},{}'.format(x, y,str(i+1)), (x + 10, y), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
+            #cv2.putText(frame, objetos[str(contador)], (x+10, y), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
+
             nuevoContorno = cv2.convexHull(c)
 
             # se pone 0 solo para dibujar ciertos contornos
             cv2.drawContours(frame, [nuevoContorno], 0, color, 4)
             contador = contador + 1
+    #cv2.putText(frame, '{},{},{}'.format(x, y, str(i + 1)), (x + 10, y), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
+    #cv2.putText(frame, objetos[str(contador)], (x + 10, y), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
+    font = cv2.FONT_HERSHEY_SIMPLEX
+
+    #cv2.putText(frame, objetos[str(contador)], (100, 100), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
 
     print(contador)
     print(objetos[str(contador)])
+    return contador
 
 
 
@@ -72,9 +80,11 @@ while True:
         maskRed1 = cv2.inRange(frameHSV, redBajo1, redAlto1)
         maskRed2 = cv2.inRange(frameHSV, redBajo2, redAlto2)
         maskRed = cv2.add(maskRed1,maskRed2)
-        dibujar(maskAzul,(255,0,0))
+
         dibujar(maskAmarillo,(0,255,255))
         dibujar(maskRed,(0,0,255))
+        contadorD =dibujar(maskAzul,(255,0,0))
+        cv2.putText(frame, objetos[str(contadorD)], (150, 150), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
         cv2.imshow('frame',frame)
         if cv2.waitKey(1) & 0xFF == ord('d'):
             break
