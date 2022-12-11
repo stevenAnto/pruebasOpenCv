@@ -22,7 +22,15 @@ maskRed2 = cv2.inRange(imagenHSV, redBajo2, redAlto2)
 maskRed = cv2.add(maskRed1,maskRed2)
 #Encontrar contornos
 
-
+ContadorGlobal=0
+objetos = {
+        "1":"Piedra",
+        "2": "Tijera",
+        "5":"Papel",
+        "3":"tres",
+        "4":"cuatro"
+    }
+contadorGlobal=0
 def dibujarContorno(contorno, color):
 
     for (i,c) in enumerate(contorno):
@@ -32,9 +40,16 @@ def dibujarContorno(contorno, color):
         y = int(M["m01"] / M["m00"])
         cv2.drawContours(image, [c], 0, color, 5)
         cv2.putText(image,str(i+1),(x+10,y+10),1,2,(0,0,0),2)
+        contadorGlobal=str(i+1)
+    print(contadorGlobal)
+    print(objetos[contadorGlobal])
+    #cv2.putText(image,objetos[contadorGlobal],(10,10),1,2,(0,0,0),2)
+
 
 
 contornosAmarillo = cv2.findContours(maskAmarillo,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
+#print(contornosAmarillo)
+#print(type(contornosAmarillo))
 contornosVede = cv2.findContours(maskVerder,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
 contornosRojo = cv2.findContours(maskRed,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)[0]
 

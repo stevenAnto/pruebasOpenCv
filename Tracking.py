@@ -1,11 +1,30 @@
 import cv2
 import numpy as np
 
+objetos = {
+"0":"Piedra",
+        "1":"Uno",
+        "2": "Tijera",
+        "5":"Papel",
+        "3":"tres",
+        "4":"Papel",
+"5":"cinco",
+"6":"seis",
+"7":"siete",
+"8":"ocho",
+
+    }
+
 def dibujar(mask,color):
+
     contornos, sinUso, = cv2.findContours(mask, cv2.RETR_EXTERNAL,
                                           cv2.CHAIN_APPROX_SIMPLE)
-    for c in contornos:
+    contador=0
+    #print(len(contornos))
+    for (i,c) in enumerate(contornos):
+
         area = cv2.contourArea(c)
+
         if area > 3000:
             # Buscamos el centro
             M = cv2.moments(c)
@@ -14,10 +33,19 @@ def dibujar(mask,color):
             y = int(M["m01"] / M["m00"])
             cv2.circle(frame, (x, y), 7, (0, 255, 0), -1)
             font = cv2.FONT_HERSHEY_SIMPLEX
-            cv2.putText(frame, '{},{}'.format(x, y), (x + 10, y), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
+            cv2.putText(frame, '{},{},{}'.format(x, y,str(i+1)), (x + 10, y), font, 0.75, (0, 255, 0), 1, cv2.LINE_AA)
             nuevoContorno = cv2.convexHull(c)
+
             # se pone 0 solo para dibujar ciertos contornos
             cv2.drawContours(frame, [nuevoContorno], 0, color, 4)
+            contador = contador + 1
+
+    print(contador)
+    print(objetos[str(contador)])
+
+
+
+    #print(objetos[contadorGlobal])
 
 cap = cv2.VideoCapture(0)
 #Sacado de StackOverFlow
