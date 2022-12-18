@@ -26,20 +26,25 @@ while(captura.isOpened()):
     ret, image = captura.read()
     if ret==True:
 
-        image =imutils.resize(image,width=600)
-        image = cv2.flip(image,1)
+        image =imutils.resize(image,width=600)# redimensione las capturas
+        image = cv2.flip(image,1) #se invierte par ano tener confusion
 
         imageAux = image.copy()
         if bg is not None:
-            fragmento = image[20:320,20:320]
+            fragmento = image[20:320,20:220]
 
             cv2.rectangle(image,(20,20),(20+200,20+300),color_fingers,4)
             grayFragmento = cv2.cvtColor(fragmento,cv2.COLOR_BGR2GRAY)
 
-            bgFragmento = bg[20:320,20:320] #tomamos la porcion de la imagen
-            cv2.imshow("fragmento",fragmento)
-            cv2.imshow("grayFragmento", grayFragmento)
-            cv2.imshow("bgFragmento", bgFragmento)
+            bgFragmento = bg[20:320,20:220] #tomamos la porcion de la imagen
+            #cv2.imshow("fragmento",fragmento)
+            #cv2.imshow("grayFragmento", grayFragmento)
+            #cv2.imshow("bgFragmento", bgFragmento)
+            #aplicando umbralizacion para separar el fondo
+            dif = cv2.absdiff(grayFragmento,bgFragmento)
+            th =cv2.threshold(dif,30,255,cv2.THRESH_BINARY)[1]
+            cv2.imshow("dif",dif)
+            cv2.imshow("th",th)
 
         cv2.imshow('video', image)
 
