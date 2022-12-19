@@ -20,6 +20,8 @@ color_d = (0,255,255)
 color_fingers = (0,255,255)
 
 bg = None
+foto = None
+fingerGlobal = 0
 
 while(captura.isOpened()):
     #devuelve un booleano y la image
@@ -67,7 +69,7 @@ while(captura.isOpened()):
 
                 #caso convexo
                 hull = cv2.convexHull(cnt)
-                cv2.drawContours(fragmento, [hull], 0, color_contorno, 10)
+                cv2.drawContours(fragmento, [hull], 0, color_contorno, 1)
 
                 hull2 = cv2.convexHull(cnt,returnPoints=False)
                 defects = cv2.convexityDefects(cnt,hull2)#encuentro los desfectos del cascaron
@@ -83,19 +85,60 @@ while(captura.isOpened()):
                         end = cnt[e][0]
                         far = cnt[f][0]
 
-                        cv2.circle(fragmento, tuple(start), 10, color_start, 2)
-                        cv2.circle(fragmento, tuple(end), 10, color_end, 2)
-                        cv2.circle(fragmento, tuple(far), 10, color_far, 1)
-                        cv2.circle(fragmento, tuple(far), 10, color_far, 1)
+                        #traingulo
+                        a= np.linalg.norm(far-end)
+                        b = np.linalg.norm(far - start)
+                        c = np.linalg.norm(start - end)
+
+                        angulo = np.arccos((np.power(a,2)+np.power(b,2)-np.power(c,2))/(2*a*b))
+                        angulo = np.degrees(angulo)
+                        angulo =int(angulo)
+
+                        if np.linalg.norm(start-end)>20 and d>10000 and angulo<90:
+                            inicio.append(start)
+                            fin.append(end)
+                            #cv2.putText(fragmento,'{}'.format(d),tuple(far),1,1,color_d,1,cv2.LINE_AA)
+                            #cv2.putText(fragmento, '{}'.format(angulo), tuple(far), 1, 1, color_d, 1, cv2.LINE_AA)
+                            cv2.circle(fragmento, tuple(start), 2, color_start, 2)
+                            cv2.circle(fragmento, tuple(end), 2, color_end, 2)
+                            cv2.circle(fragmento, tuple(far), 2, color_far, -1)
+                    if len(inicio)==0:
+                        minY = np.linalg.norm(ymin[0]-[x,y])
+                        cv2.putText(fragmento, '{}'.format(minY), (50,50), 1, 1, color_fingers, 1,cv2.LINE_AA)
+                        if minY >= 80:
+                            fingers = fingers+1
+                            cv2.putText(fragmento, '{}'.format(fingers), tuple(ymin[0]), 1, 1, color_fingers, 1, cv2.LINE_AA)
+
+                    for i in range(len(inicio)):
+                        fingers = fingers+1
+                        cv2.putText(fragmento, '{}'.format(fingers), tuple(inicio[i]), 1, 1, color_fingers, 1, cv2.LINE_AA)
+                fingerGlobal=fingers
+
+
+
 
             #cv2.imshow("dif",dif)
             cv2.imshow("th",th)
+            cv2.imshow("foto", foto)
 
         cv2.imshow('video', image)
 
         k = cv2.waitKey(5)
         if k == ord('3'):
             bg = cv2.cvtColor(imageAux,cv2.COLOR_BGR2GRAY)
+        if k == ord('4'):
+            bg =None
+            foto = image[20:320,20:220]
+            if fingerGlobal<2:
+                cv2.putText(foto, 'piedra', (50, 50), 1, 1, color_contorno, 2)
+            elif fingerGlobal==2:
+                cv2.putText(foto, 'tijera', (50, 50), 1, 1, color_contorno, 2)
+            elif fingerGlobal==3:
+                cv2.putText(foto, 'Es un tres, no valid', (50, 50), 4, 2, color_contorno, 2)
+            elif fingerGlobal>=4:
+                cv2.putText(foto, 'Papel', (50, 50), 1, 1, color_contorno, 2)
+
+
         if k & 0xFF==ord('d'):
             break
 captura.release()
