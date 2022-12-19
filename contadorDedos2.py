@@ -65,6 +65,10 @@ while(captura.isOpened()):
                 ymin = cnt.min(axis=1)
                 cv2.circle(fragmento, tuple(ymin[0]), 10, color_ymin, -1)
 
+                #caso convexo
+                hull = cv2.convexHull(cnt)
+                cv2.drawContours(fragmento, [hull], 0, color_contorno, 10)
+
             #cv2.imshow("dif",dif)
             cv2.imshow("th",th)
 
