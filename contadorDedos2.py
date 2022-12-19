@@ -69,6 +69,25 @@ while(captura.isOpened()):
                 hull = cv2.convexHull(cnt)
                 cv2.drawContours(fragmento, [hull], 0, color_contorno, 10)
 
+                hull2 = cv2.convexHull(cnt,returnPoints=False)
+                defects = cv2.convexityDefects(cnt,hull2)#encuentro los desfectos del cascaron
+
+                if defects is not None:
+                    inicio = []
+                    fin = []
+                    fingers = 0
+
+                    for i in range(defects.shape[0]):
+                        s,e,f,d = defects[i,0]
+                        start = cnt[s][0]
+                        end = cnt[e][0]
+                        far = cnt[f][0]
+
+                        cv2.circle(fragmento, tuple(start), 10, color_start, 2)
+                        cv2.circle(fragmento, tuple(end), 10, color_end, 2)
+                        cv2.circle(fragmento, tuple(far), 10, color_far, 1)
+                        cv2.circle(fragmento, tuple(far), 10, color_far, 1)
+
             #cv2.imshow("dif",dif)
             cv2.imshow("th",th)
 
