@@ -50,7 +50,20 @@ while(captura.isOpened()):
             contornos = cv2.findContours(th, cv2.RETR_EXTERNAL,
                                          cv2.CHAIN_APPROX_SIMPLE)[0]
             contornos = sorted(contornos,key=cv2.contourArea,reverse=True)[:1]
-            cv2.drawContours(fragmento, contornos, 0, (0,255,0), 10)
+            #cv2.drawContours(fragmento, contornos, 0, (0,255,0), 10)
+
+            for cnt in contornos:
+
+                # Encontrar el centro del contorno
+                M = cv2.moments(cnt)
+                if M["m00"] == 0: M["m00"] = 1
+                x = int(M["m10"] / M["m00"])
+                y = int(M["m01"] / M["m00"])
+                cv2.circle(fragmento, (x,y), 10, (0, 255, 0), -1)
+
+                # Punto más alto del contorno
+                ymin = cnt.min(axis=1)
+                cv2.circle(fragmento, tuple(ymin[0]), 10, color_ymin, -1)
 
             #cv2.imshow("dif",dif)
             cv2.imshow("th",th)
@@ -58,7 +71,7 @@ while(captura.isOpened()):
         cv2.imshow('video', image)
 
         k = cv2.waitKey(5)
-        if k == ord('i'):
+        if k == ord('3'):
             bg = cv2.cvtColor(imageAux,cv2.COLOR_BGR2GRAY)
         if k & 0xFF==ord('d'):
             break
