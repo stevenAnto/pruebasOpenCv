@@ -67,6 +67,11 @@ Se mostra otra ventana mostrando los resultados.
 
 Cada vez que desea jugar debera, quitar la mano, y presionar la tecla '3' para tomar foto del fondo y 
 nuevamente poner su mano y presionar '4' cuando elija piedra,papel o tijera.
+- ![ejercicio01](primera.jpg)
+
+- ![ejercicio02](papel.jpg)
+
+- ![ejercicio03](tijera.png)
 
 
 
