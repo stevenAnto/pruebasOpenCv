@@ -57,8 +57,8 @@
 
 # Readme
 
-Al ejecutar el program se mostrara la cam captura la secudncias de imagens del video, ademas aparecera un rectangulo verde en donde el usuario tendra que poner su
-mano de acuerdo.
+Al ejecutar el program se mostrara una ventana capturando la secudncias de imagenes ingresadas a traves de la camara, ademas aparecera un rectangulo verde en donde 
+el usuario tendra que poner su mano de acuerdo.
 Para iniciar debe presionar  la tecla numero 3 (esta tecla hace que se toma un fondo inicial del area de dicho rectangulo sin la mano), luego poner su mano en el
 rectangulo y ponerlo en forma de piedra, papel o tijera, para indicar su eleccion tendra que presionar la tecla  '4'. El programa internamente tomara una foto de su
 mano en posicion de piedra papel o tijera, y lo contrastara con la leccion de la computadora. Se mostra otra ventana mostrando los resultados.
