@@ -48,23 +48,24 @@ while True:
 
     # Redimensionar la imagen para que tenga un ancho de 640
     frame = imutils.resize(frame, width=640)
-    #frame = cv2.flip(frame, 1)
+    frame = cv2.flip(frame, 1)
     frameAux = frame.copy()
-    cv2.rectangle(frame, (380,50), (600, 300), color_contorno, 4)
+    cv2.rectangle(frame, (50,40), (270, 310), color_contorno, 4)
+    #cv2.rectangle(frame, (40, 50), (260, 300), color_contorno, 4)
 
     if bg is not None:
 
         # Determinar la región de interés
-        fragmento = frame[50:300, 380:600]
-        cv2.rectangle(frame, (380 - 2, 50 - 2), (600 + 2, 300 + 2), color_fingers, 1)
+        fragmento = frame[40:310, 50:270]
+        cv2.rectangle(frame, (50, 40 ), (270, 310), color_fingers, 4)#coordenadas invertidas
         grayFragmento = cv2.cvtColor(fragmento, cv2.COLOR_BGR2GRAY)
 
         # Región de interés del fondo de la imagen
-        bgROI = bg[50:300, 380:600]
+        bgFragmento = bg[40:310, 50:270]
 
         # Determinar la imagen binaria (background vs foreground)
-        dif = cv2.absdiff(grayFragmento, bgROI)
-        th = cv2.threshold(dif, 30, 255, cv2.THRESH_BINARY)[1]
+        dif = cv2.absdiff(grayFragmento, bgFragmento)
+        th = cv2.threshold(dif, 40, 220, cv2.THRESH_BINARY)[1]
         th = cv2.medianBlur(th, 7)
 
         # Encontrando los contornos de la imagen binaria

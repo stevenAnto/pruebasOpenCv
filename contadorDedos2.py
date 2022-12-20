@@ -2,7 +2,17 @@ import cv2
 import numpy as np
 import imutils
 
+objetos = {
+"0":"Piedra",
+        "1":"Uno",
+        "2": "Tijera",
+        "5":"Papel",
+        "3":"tres",
+        "4":"Papel",
+"5":"Papel",
+"6":"Papel",
 
+    }
 captura =cv2.VideoCapture(0)
 
 color_start = (204,204,0)
@@ -129,7 +139,7 @@ while(captura.isOpened()):
         if k == ord('4'):
             bg =None
             foto = image[20:320,20:220]
-            cv2.putText(foto, object[str(fingerGlobal)], (50, 50), 1, 1, color_contorno, 2)
+            cv2.putText(foto, objetos[str(fingerGlobal)], (50, 50), 1, 1, color_contorno, 2)
             cv2.imshow("foto", foto)
 
 
