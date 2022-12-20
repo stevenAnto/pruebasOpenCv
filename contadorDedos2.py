@@ -94,7 +94,7 @@ while(captura.isOpened()):
                         angulo = np.degrees(angulo)
                         angulo =int(angulo)
 
-                        if np.linalg.norm(start-end)>20 and d>10000 and angulo<90:
+                        if np.linalg.norm(start-end)>30 and d>12000 and angulo<90:
                             inicio.append(start)
                             fin.append(end)
                             #cv2.putText(fragmento,'{}'.format(d),tuple(far),1,1,color_d,1,cv2.LINE_AA)
@@ -119,7 +119,7 @@ while(captura.isOpened()):
 
             #cv2.imshow("dif",dif)
             cv2.imshow("th",th)
-            cv2.imshow("foto", foto)
+
 
         cv2.imshow('video', image)
 
@@ -129,14 +129,8 @@ while(captura.isOpened()):
         if k == ord('4'):
             bg =None
             foto = image[20:320,20:220]
-            if fingerGlobal<2:
-                cv2.putText(foto, 'piedra', (50, 50), 1, 1, color_contorno, 2)
-            elif fingerGlobal==2:
-                cv2.putText(foto, 'tijera', (50, 50), 1, 1, color_contorno, 2)
-            elif fingerGlobal==3:
-                cv2.putText(foto, 'Es un tres, no valid', (50, 50), 4, 2, color_contorno, 2)
-            elif fingerGlobal>=4:
-                cv2.putText(foto, 'Papel', (50, 50), 1, 1, color_contorno, 2)
+            cv2.putText(foto, object[str(fingerGlobal)], (50, 50), 1, 1, color_contorno, 2)
+            cv2.imshow("foto", foto)
 
 
         if k & 0xFF==ord('d'):
