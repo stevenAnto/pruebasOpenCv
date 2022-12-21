@@ -2,6 +2,7 @@ import cv2
 import random
 import numpy as np
 import imutils
+import speech_recognition as sr
 
 objetos = {
 "0":"Piedra",
@@ -26,6 +27,7 @@ cap =cv2.VideoCapture(0)
 bg = None
 foto = None
 fingerGlobal = 0
+texto = "vacio"
 
 # COLORES PARA VISUALIZACIÓN
 color_start = (204, 204, 0)
@@ -159,8 +161,39 @@ while True:
 
     k = cv2.waitKey(10)
     if k == ord('3'):
+        print('entro 3')
         bg = cv2.cvtColor(frameAux, cv2.COLOR_BGR2GRAY)
+        "intento asincrono"
+        """def callback(recognizer, audio):  # this is called from the background thread
+            try:
+                texto = recognizer.recognize_google(audio, language='es')
+                print("You said.... " +texto)
+                # received audio data, now need to recognize it
+                if 'tijera' in texto:
+                    print('encontro a tijera')
+                    print('entre al segundo if')
+                    numRandom = random.randrange(0, 6, 2)
+
+                    foto = frame[50:300, 380:600]
+                    cv2.putText(foto, 'Jugador' + objetos[str(fingerGlobal)], (50, 50), 1, 1, color_contorno, 2)
+                    cv2.putText(foto, 'Computadora' + objetos[str(numRandom)], (50, 90), 1, 1, color_contorno, 2)
+                    cv2.putText(foto, juego[fingerGlobal, numRandom], (50, 120), 1, 1, color_contorno, 2)
+                    cv2.imshow("Resultado", foto)
+                    bg = None
+            except:
+                print("Oops! Didn't catch that")
+
+
+        r = sr.Recognizer()
+        m = sr.Microphone(0)
+        r.listen_in_background(m, callback)
+        print('salimos de mico')"""
+
         #tomo foto
+    print(texto)
+    if 'tijera' in texto:
+        print('encontro a tijera')
+        k='4'
     if k == ord('4'):
         numRandom = random.randrange(0,6,2)
 
