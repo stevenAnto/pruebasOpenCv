@@ -52,6 +52,7 @@ frammeAux2 = None
 
 
 def visualizar():
+    global fingerGlobal
     global frameCapturar
     global frammeAux2
     global  cap
@@ -190,13 +191,18 @@ def reiniciar():
 def capturar():
     global bg
     global frameCapturar
+    global fingerGlobal
 
     numRandom = random.randrange(0, 6, 2)
+    lblResultdos.configure(text='Jugadora'+objetos[str(fingerGlobal)]
+    +"\nComputadora"+objetos[str(numRandom)]+"\n"+juego[fingerGlobal,numRandom])
 
-    foto = frameCapturar[50:300, 380:600]
+
+
+    """foto = frameCapturar[50:300, 380:600]
     cv2.putText(foto, 'Jugador' + objetos[str(fingerGlobal)], (50, 50), 1, 1, color_contorno, 2)
     cv2.putText(foto, 'Computadora' + objetos[str(numRandom)], (50, 90), 1, 1, color_contorno, 2)
-    cv2.putText(foto, juego[fingerGlobal, numRandom], (50, 120), 1, 1, color_contorno, 2)
+    cv2.putText(foto, juego[fingerGlobal, numRandom], (50, 120), 1, 1, color_contorno, 2)"""
     bg = None
 
 def iniciar():
@@ -231,6 +237,9 @@ btnCapturar.grid(column=2,row=0,padx=1,pady=10)
 imagenDedos = PhotoImage(file='iconoJego.png')
 lblVideo = Label(root,image=imagenDedos)
 lblVideo.grid(column=0,row=1,columnspan=4)
+
+lblResultdos = Label(root,text="Resultados")
+lblResultdos.grid(column=0,row=2,columnspan=4)
 
 root.mainloop()
 
