@@ -19,13 +19,13 @@ objetos = {
 "6":"Papel",
 
     }
-juego  = np.array([["Empate","no validdo","Ganado Jugador","no valida","Gana Computadora","Gana computadora","gana Computadora"],
-                   ["no validdo","Empate","no validdo","no validdo","no validdo","no validdo","no validdo"],
-                   ["Gana Comptutadora","no validdo","Empate","no valida","Gana Jugador","Gana Jugador","gana Jugador"],
-                   ["no validdo","no validdo","no validdo","no validdo","no validdo","no validdo","no validdo"],
-                   ["Gana Jugador","no validdo","Ganado Computadora","no valida","Empate","Empate","Empate"],
-                   ["Gana Jugador","no validdo","Ganado Computadora","no valida","Empate","Empate","Empate"],
-                   ["Gana Jugador","no validdo","Ganado Computadora","no valida","Empate","Empate","Empate"],])
+juego  = np.array([["Empate","Lo siento, creo que no vi bien","Ganado Jugador","Lo siento, creo que no vi bien","Gana Computadora","Gana computadora","gana Computadora"],
+                   ["Lo siento, creo que no vi bien","Empate","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien"],
+                   ["Gana Comptutadora","Lo siento, creo que no vi bien","Empate","Lo siento, creo que no vi bien","Gana Jugador","Gana Jugador","gana Jugador"],
+                   ["Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien","Lo siento, creo que no vi bien"],
+                   ["Gana Jugador","Lo siento, creo que no vi bien","Ganado Computadora","Lo siento, creo que no vi bien","Empate","Empate","Empate"],
+                   ["Gana Jugador","Lo siento, creo que no vi bien","Ganado Computadora","Lo siento, creo que no vi bien","Empate","Empate","Empate"],
+                   ["Gana Jugador","Lo siento, creo que no vi bien","Ganado Computadora","Lo siento, creo que no vi bien","Empate","Empate","Empate"],])
 cap =cv2.VideoCapture(0)
 
 bg = None
@@ -43,7 +43,7 @@ color_far_end = (204, 0, 204)
 color_start_end = (0, 255, 255)
 
 color_contorno = (0, 255, 0)
-color_ymin = (0, 130, 255)  # Punto más alto del contorno
+color_ymin = (0, 130, 255)  # 
 # color_angulo = (0,255,255)
 # color_d = (0,255,255)
 color_fingers = (0, 255, 255)
@@ -71,9 +71,9 @@ def visualizar():
             if bg is not None:
                 # Determinar la región de interés
                 fragmento = frame[40:310, 50:270]
-                frameCapturar=fragmento
+                frameCapturar=fragmento.copy()
                 cv2.rectangle(frame, (50, 40), (270, 310), color_fingers, 4)  # coordenadas invertidas
-                grayFragmento = cv2.cvtColor(fragmento, cv2.COLOR_BGR2GRAY)
+                grayFragmento = cv2.cvtColor(frameCapturar, cv2.COLOR_BGR2GRAY)
 
                 # Región de interés del fondo de la imagen
                 bgFragmento = bg[40:310, 50:270]
@@ -94,15 +94,15 @@ def visualizar():
                     if M["m00"] == 0: M["m00"] = 1
                     x = int(M["m10"] / M["m00"])
                     y = int(M["m01"] / M["m00"])
-                    cv2.circle(fragmento, tuple([x, y]), 5, (0, 255, 0), -1)
+                    cv2.circle(frameCapturar, tuple([x, y]), 5, (0, 255, 0), -1)
 
                     # Punto más alto del contorno
                     ymin = cnt.min(axis=1)
-                    cv2.circle(fragmento, tuple(ymin[0]), 5, color_ymin, -1)
+                    cv2.circle(frameCapturar, tuple(ymin[0]), 5, color_ymin, -1)
 
                     # Contorno encontrado a través de cv2.convexHull
                     hull1 = cv2.convexHull(cnt)
-                    cv2.drawContours(fragmento, [hull1], 0, color_contorno, 2)
+                    cv2.drawContours(frameCapturar, [hull1], 0, color_contorno, 2)
 
                     # Defectos convexos
                     hull2 = cv2.convexHull(cnt, returnPoints=False)
@@ -142,9 +142,9 @@ def visualizar():
                                 # Visualización de distintos datos obtenidos
                                 # cv2.putText(ROI,'{}'.format(angulo),tuple(far), 1, 1.5,color_angulo,2,cv2.LINE_AA)
                                 # cv2.putText(ROI,'{}'.format(d),tuple(far), 1, 1.1,color_d,1,cv2.LINE_AA)
-                                cv2.circle(fragmento, tuple(start), 5, color_start, 2)
-                                cv2.circle(fragmento, tuple(end), 5, color_end, 2)
-                                cv2.circle(fragmento, tuple(far), 7, color_far, -1)
+                                cv2.circle(frameCapturar, tuple(start), 5, color_start, 2)
+                                cv2.circle(frameCapturar, tuple(end), 5, color_end, 2)
+                                cv2.circle(frameCapturar, tuple(far), 7, color_far, -1)
                             # cv2.line(ROI,tuple(start),tuple(far),color_start_far,2)
                             # cv2.line(ROI,tuple(far),tuple(end),color_far_end,2)
                             # cv2.line(ROI,tuple(start),tuple(end),color_start_end,2)
@@ -165,14 +165,14 @@ def visualizar():
                                         cv2.LINE_AA)
                             if i == len(inicio) - 1:
                                 fingers = fingers + 1
-                                cv2.putText(fragmento, '{}'.format(fingers), tuple(fin[i]), 1, 1.7, (color_fingers), 1,
+                                cv2.putText(frameCapturar, '{}'.format(fingers), tuple(fin[i]), 1, 1.7, (color_fingers), 1,
                                             cv2.LINE_AA)
                         fingerGlobal = fingers
 
                         # Se visualiza el número de dedos levantados en el rectángulo izquierdo
                         cv2.putText(frame, '{}'.format(fingers), (390, 45), 1, 4, (color_fingers), 2, cv2.LINE_AA)
                 cv2.imshow('th', th)
-                cv2.imshow("Resultado", fragmento)
+                cv2.imshow("Resultado", frameCapturar)
 
             im = Image.fromarray(frame)
             img = ImageTk.PhotoImage(image=im)
@@ -194,8 +194,8 @@ def capturar():
     global fingerGlobal
 
     numRandom = random.randrange(0, 6, 2)
-    lblResultdos.configure(text='Jugadora'+objetos[str(fingerGlobal)]
-    +"\nComputadora"+objetos[str(numRandom)]+"\n"+juego[fingerGlobal,numRandom])
+    lblResultdos.configure(text='Jugador: '+objetos[str(fingerGlobal)]
+    +"\nComputadora: "+objetos[str(numRandom)]+"\n"+juego[fingerGlobal,numRandom])
 
 
 
